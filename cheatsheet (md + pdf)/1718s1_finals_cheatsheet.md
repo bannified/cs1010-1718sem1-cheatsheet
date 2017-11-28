@@ -1231,6 +1231,107 @@ scanf("%d %f %s", &box3.width, &box3.density, box3.name);
 box1 = box3;
 ```
 
+Array of Structures (example/usage)
+```c
+
+typedef struct {
+	int id;
+	char name[MAX_LENGTH+1];
+} customer_t;
+
+typedef struct {
+	int cusID;
+	char category[MAX_LENGTH+1];
+	int spending;
+} record_t;
+
+void readInputs(customer_t customerArr[], record_t recordsArr[],
+    int* customersSize, int* recordsSize){
+
+	int i;
+
+	printf("Enter number of customers: \n");
+	scanf("%d", customersSize);
+
+	printf("Enter customers: \n");
+	for (i = 0; i < *customersSize; i++)
+		scanf("%d %s", &customerArr[i].id, customerArr[i].name);
+
+	printf("Enter number of records: \n");
+	scanf("%d", recordsSize);
+
+	printf("Enter records: \n");
+	for (i = 0; i < *recordsSize; i++)
+		scanf("%d %s %d", &recordsArr[i].cusID,
+                recordsArr[i].category, &recordsArr[i].spending);
+}
+
+//SEARCHING
+int getIDByName(customer_t customerArr[], char name[], int size){
+	int i;
+	for (i = 0; i < size; i++){
+		if (strcmp(customerArr[i].name, name) == 0){
+			return customerArr[i].id;
+		}
+	}
+	return -1;
+}
+
+// SEARCHING
+int findRecords(record_t recordsArr[], int id, int size, record_t result[]){
+
+	int i, runningCount = 0;
+
+	for (i = 0; i < size; i++){
+		if (recordsArr[i].cusID == id){
+			result[runningCount] = recordsArr[i];
+			runningCount++;
+		}
+	}
+	return runningCount;
+}
+
+// (SELECTION) sorting
+void sortRecords(record_t arr[], int size){
+	int i, j;
+	record_t tmp;
+	int maxPrice, maxIndex;
+
+	for (i = 0; i < size - 1; i++){
+		maxPrice = arr[i].spending;
+		maxIndex = i;
+		for (j = i + 1; j < size; j++){
+			if (arr[j].spending > maxPrice){
+				maxPrice = arr[j].spending;
+				maxIndex = j;
+			}
+		}
+		if (maxIndex != i){
+			tmp = arr[i];
+			arr[i] = arr[maxIndex];
+			arr[maxIndex] = tmp;
+		}
+	}
+}
+
+```
+
+The arrow operator ( `->`)
+- dereferences the struct (given the address) to access the instance's variables
+```c
+void change_name_and_age(player_t *player_ptr) {
+	strcpy((*player_ptr).name, "Alexandra");
+	(*player_ptr).age = 25;
+}
+
+// OR
+
+void change_name_and_age(player_t *player_ptr) {
+	strcpy(player_ptr->name, "Alexandra");
+	player_ptr->age = 25;
+}
+
+```
 ---
 
 # Unit 19 : File processing
